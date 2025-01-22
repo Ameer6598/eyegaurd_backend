@@ -21,7 +21,7 @@ class CompanyController extends Controller
             $request->validate([
                 'company_name' => 'required|string|max:255',
                 'username' => 'required',
-                'email' => 'required',
+                'email' => 'required|email|unique:users,email',
                 'password' => 'required',
             ]);
             DB::beginTransaction();
@@ -132,6 +132,7 @@ class CompanyController extends Controller
             return $this->errorResponse(['model' => 'company'], $e->getMessage(), [], 422);
         }
     }
+    
     public function getAll()
     {
         try {
