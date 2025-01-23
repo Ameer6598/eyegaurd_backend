@@ -7,6 +7,7 @@ use App\Imports\ImportEmployees;
 use App\Traits\ApiResponse;
 
 use App\Models\Company;
+use App\Models\Transaction;
 use App\Models\Employee;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -35,6 +36,7 @@ class EmployeeController extends Controller
                 'designation' => $request->designation	 ?? '',
                 'status' => $request->status 	 ?? '',
                 'phone' => $request->phone ?? '',
+                'benefit_amount' => $request->benefit_amount ?? '',
                 'company_id' => auth('sanctum')->user()->company_id,
             ]);
             
@@ -45,6 +47,14 @@ class EmployeeController extends Controller
                 'company_id' => auth('sanctum')->user()->company_id,
                 'employee_id' => $employee->id,
                 'password' => Hash::make($request->password),
+            ]);
+
+            $transaction = Transaction::create([
+                'employee_id' => $employee->id,
+                'transaction_type' => 'credit',
+                'amount' => $request->benefit_amount ?? '',
+                'balance' => $request->benefit_amount ?? '',
+                'description' => $request->description ?? '',
             ]);
 
             DB::commit();
@@ -184,6 +194,55 @@ class EmployeeController extends Controller
                 [$e->getMessage()],
                 500
             );
+        }
+    }
+
+    public function bulkUpdate(Request $request)
+    {
+        $data = $request->validate([
+            'employee_id' => 'required|array',
+            'employee_id.*' => 'exists:employees,id', 
+            'amount' => 'required|numeric',
+            'type' => 'required|in:credit,debit',
+        ]);
+        try {
+            DB::beginTransaction(); 
+
+            $transactions = [];
+            foreach ($data['employee_id'] as $item) {
+                $employee = Employee::findOrFail($item);
+                $amount = $data['amount'];
+                $type = $data['type'];
+
+                if ($type === 'credit') {
+                    $employee->benefit_amount += $amount;
+                } else {
+                    $employee->benefit_amount -= $amount;
+                }
+                $employee->save();
+
+                $transaction = Transaction::create([
+                    'employee_id' => $employee->id,
+                    'amount' => $amount,
+                    'balance' => $employee->benefit_amount,
+                    'transaction_type' => $type,
+                ]);
+
+                $transactions[] = [
+                    'employee_id' => $employee->id,
+                    'transaction_id' => $transaction->id,
+                    'status' => 'success',
+                ];
+            }
+
+            DB::commit();
+            return $this->successResponse(['model' => 'employee'], 'Transactions processed successfully', [
+                'transactions' => $transactions,
+            ]);
+
+        } catch (\Exception $e) {
+            DB::rollBack(); 
+            return $this->errorResponse(['model' => 'employee'], $e->getMessage(), [], 424);
         }
     }
 
