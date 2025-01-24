@@ -135,6 +135,7 @@ class EmployeeController extends Controller
             $employee = DB::table('employees')
                 ->join('users', 'employees.id', '=', 'users.employee_id')
                 ->where('employees.id', $employeeId)
+                ->where('employees.company_id', auth('sanctum')->user()->company_id)
                 ->select('employees.*', 'users.name as username', 'users.email')
                 ->first();
 
@@ -157,6 +158,7 @@ class EmployeeController extends Controller
             $employees = DB::table('employees')
                 ->join('users', 'employees.id', '=', 'users.employee_id')
                 ->select('employees.*', 'users.name as username', 'users.email')
+                ->where('employees.company_id', auth('sanctum')->user()->company_id)
                 ->get();
             if ($employees->isEmpty()) {
                 return $this->errorResponse(['model' => 'employee'], 'No employees found', [], 404);
