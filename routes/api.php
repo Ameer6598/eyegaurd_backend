@@ -102,12 +102,14 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::delete('{employeeId}', [EmployeeController::class, 'delete']);
             Route::get('{employeeId}', [EmployeeController::class, 'getEmployee']);
         });
+        Route::get('get-company-products', [ProductController::class, 'getCompanyProducts']);
     });
 
     Route::middleware('role:employee')->group(function () {
-        Route::get('/employee/dashboard', function () {
-            return 'Employee Dashboard';
-        });
+
+        Route::get('get-employee-products', [ProductController::class, 'getemployeeProducts']);
+
+
     });
 
     Route::post('/logout', [AuthController::class, 'logout']);

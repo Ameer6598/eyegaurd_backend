@@ -147,6 +147,7 @@ class ProductController extends Controller
             return $this->errorResponse(['model' => 'products'], $e->getMessage(), [], 500);
         }
     }
+
     public function getFullProductDetail($productId)
     {
         try {
@@ -168,6 +169,53 @@ class ProductController extends Controller
         }
     }
 
+    public function getCompanyProducts()
+    {
+        try {
+            $baseUrl = config('app.url'); 
+
+            $products = $this->getMappedProducts('company');
+            if (!$products) {
+                return $this->errorResponse(['model' => 'products'], 'Product not found', [], 404);
+            }
+            foreach($products as $product)
+            {
+                $product->images = $this->processImages($product->images, $baseUrl);
+
+            }
+
+            return $this->successResponse(['model' => 'products'], 'Product retrieved successfully', [
+                'products' => $products,
+            ]);
+            
+        } catch (\Exception $e) {
+            return $this->errorResponse(['model' => 'products'], $e->getMessage(), [], 500);
+        }
+    }
+    
+    public function getemployeeProducts()
+    {
+        try {
+            $baseUrl = config('app.url'); 
+
+            $products = $this->getMappedProducts('employee');
+            if (!$products) {
+                return $this->errorResponse(['model' => 'products'], 'Product not found', [], 404);
+            }
+            foreach($products as $product)
+            {
+                $product->images = $this->processImages($product->images, $baseUrl);
+
+            }
+
+            return $this->successResponse(['model' => 'products'], 'Product retrieved successfully', [
+                'product' => $products,
+            ]);
+            
+        } catch (\Exception $e) {
+            return $this->errorResponse(['model' => 'products'], $e->getMessage().$e->getLine(), [], 500);
+        }
+    }
     public function deleteProduct($productId)
     {
         try {
