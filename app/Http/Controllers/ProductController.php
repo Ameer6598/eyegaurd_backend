@@ -67,7 +67,7 @@ class ProductController extends Controller
             ]);
         } catch (\Exception $e) {
             DB::rollBack();
-            return $this->errorResponse(['model' => 'products'], $e->getMessage(), [], 500);
+            return $this->errorResponse(['model' => 'products'], $e->getMessage(), [], 422);
         }
     }
 
@@ -108,7 +108,7 @@ class ProductController extends Controller
             ]);
         } catch (\Exception $e) {
             DB::rollBack();
-            return $this->errorResponse(['model' => 'products'], $e->getMessage(), [], 500);
+            return $this->errorResponse(['model' => 'products'], $e->getMessage(), [], 422);
 
         }
     }
@@ -144,7 +144,7 @@ class ProductController extends Controller
                 ]);
             }
         } catch (\Exception $e) {
-            return $this->errorResponse(['model' => 'products'], $e->getMessage(), [], 500);
+            return $this->errorResponse(['model' => 'products'], $e->getMessage(), [], 422);
         }
     }
 
@@ -165,7 +165,7 @@ class ProductController extends Controller
             ]);
             
         } catch (\Exception $e) {
-            return $this->errorResponse(['model' => 'products'], $e->getMessage(), [], 500);
+            return $this->errorResponse(['model' => 'products'], $e->getMessage(), [], 422);
         }
     }
 
@@ -189,7 +189,7 @@ class ProductController extends Controller
             ]);
             
         } catch (\Exception $e) {
-            return $this->errorResponse(['model' => 'products'], $e->getMessage(), [], 500);
+            return $this->errorResponse(['model' => 'products'], $e->getMessage(), [], 422);
         }
     }
     
@@ -213,7 +213,7 @@ class ProductController extends Controller
             ]);
             
         } catch (\Exception $e) {
-            return $this->errorResponse(['model' => 'products'], $e->getMessage().$e->getLine(), [], 500);
+            return $this->errorResponse(['model' => 'products'], $e->getMessage().$e->getLine(), [], 422);
         }
     }
     public function deleteProduct($productId)
@@ -231,7 +231,7 @@ class ProductController extends Controller
             
         } catch (\Exception $e) {
             DB::rollBack();
-            return $this->errorResponse(['model' => 'products'], $e->getMessage(), [], 500);
+            return $this->errorResponse(['model' => 'products'], $e->getMessage(), [], 422);
 
         }
     }
@@ -264,7 +264,7 @@ class ProductController extends Controller
         } catch (\Exception $e) {
             DB::rollBack(); 
 
-            return $this->errorResponse(['model' => 'category'], $e->getMessage(), [], 500);
+            return $this->errorResponse(['model' => 'category'], $e->getMessage(), [], 422);
         }
     }
 
@@ -292,7 +292,7 @@ class ProductController extends Controller
             ]);
         } catch (\Exception $e) {
             DB::rollBack(); 
-            return $this->errorResponse(['model' => 'category'], $e->getMessage(), [], 500);
+            return $this->errorResponse(['model' => 'category'], $e->getMessage(), [], 422);
         }
     }
 
@@ -309,7 +309,7 @@ class ProductController extends Controller
             return $this->successResponse(['model' => 'category'], 'Category deleted successfully', []);
         } catch (\Exception $e) {
             DB::rollBack(); 
-            return $this->errorResponse(['model' => 'category'], $e->getMessage(), [], 500);
+            return $this->errorResponse(['model' => 'category'], $e->getMessage(), [], 422);
         }
     }
 
@@ -338,7 +338,7 @@ class ProductController extends Controller
             ]);
         } catch (\Exception $e) {
             DB::rollBack();
-            return $this->errorResponse(['model' => 'color'], $e->getMessage(), [], 500);
+            return $this->errorResponse(['model' => 'color'], $e->getMessage(), [], 422);
         }
     }
 
@@ -364,7 +364,7 @@ class ProductController extends Controller
             ]);
         } catch (\Exception $e) {
             DB::rollBack(); 
-            return $this->errorResponse(['model' => 'color'], $e->getMessage(), [], 500);
+            return $this->errorResponse(['model' => 'color'], $e->getMessage(), [], 422);
         }
     }
 
@@ -382,7 +382,7 @@ class ProductController extends Controller
         } catch (\Exception $e) {
             DB::rollBack(); 
 
-            return $this->errorResponse(['model' => 'color'], $e->getMessage(), [], 500);
+            return $this->errorResponse(['model' => 'color'], $e->getMessage(), [], 422);
         }
     }
 
@@ -413,7 +413,7 @@ class ProductController extends Controller
         } catch (\Exception $e) {
             DB::rollBack(); 
 
-            return $this->errorResponse(['model' => 'frame_size'], $e->getMessage(), [], 500);
+            return $this->errorResponse(['model' => 'frame_size'], $e->getMessage(), [], 422);
         }
     }
 
@@ -441,7 +441,7 @@ class ProductController extends Controller
         } catch (\Exception $e) {
             DB::rollBack(); 
 
-            return $this->errorResponse(['model' => 'frame_size'], $e->getMessage(), [], 500);
+            return $this->errorResponse(['model' => 'frame_size'], $e->getMessage(), [], 422);
         }
     }
 
@@ -459,7 +459,7 @@ class ProductController extends Controller
         } catch (\Exception $e) {
             DB::rollBack(); 
 
-            return $this->errorResponse(['model' => 'frame_size'], $e->getMessage(), [], 500);
+            return $this->errorResponse(['model' => 'frame_size'], $e->getMessage(), [], 422);
         }
     }
 
@@ -489,7 +489,7 @@ class ProductController extends Controller
         } catch (\Exception $e) {
             DB::rollBack(); 
 
-            return $this->errorResponse(['model' => 'rim_type'], $e->getMessage(), [], 500);
+            return $this->errorResponse(['model' => 'rim_type'], $e->getMessage(), [], 422);
         }
     }
 
@@ -514,7 +514,7 @@ class ProductController extends Controller
         } catch (\Exception $e) {
             DB::rollBack(); 
 
-            return $this->errorResponse(['model' => 'rim_type'], $e->getMessage(), [], 500);
+            return $this->errorResponse(['model' => 'rim_type'], $e->getMessage(), [], 422);
         }
     }
 
@@ -532,7 +532,7 @@ class ProductController extends Controller
         } catch (\Exception $e) {
             DB::rollBack(); 
 
-            return $this->errorResponse(['model' => 'rim_type'], $e->getMessage(), [], 500);
+            return $this->errorResponse(['model' => 'rim_type'], $e->getMessage(), [], 422);
         }
     }
 
@@ -561,7 +561,7 @@ class ProductController extends Controller
         } catch (\Exception $e) {
             DB::rollBack();
 
-            return $this->errorResponse(['model' => 'style'], $e->getMessage(), [], 500);
+            return $this->errorResponse(['model' => 'style'], $e->getMessage(), [], 422);
         }
     }
     
@@ -586,7 +586,7 @@ class ProductController extends Controller
         } catch (\Exception $e) {
             DB::rollBack(); 
 
-            return $this->errorResponse(['model' => 'style'], $e->getMessage(), [], 500);
+            return $this->errorResponse(['model' => 'style'], $e->getMessage(), [], 422);
         }
     }
 
@@ -604,7 +604,7 @@ class ProductController extends Controller
         } catch (\Exception $e) {
             DB::rollBack(); 
 
-            return $this->errorResponse(['model' => 'style'], $e->getMessage(), [], 500);
+            return $this->errorResponse(['model' => 'style'], $e->getMessage(), [], 422);
         }
     }
 
@@ -626,7 +626,7 @@ class ProductController extends Controller
         } catch (\Exception $e) {
             DB::rollBack();
 
-            return $this->errorResponse(['model' => 'material'], $e->getMessage(), [], 500);
+            return $this->errorResponse(['model' => 'material'], $e->getMessage(), [], 422);
         }
     }
 
@@ -636,7 +636,7 @@ class ProductController extends Controller
             $materials = Material::all();
             return $this->successResponse(['model' => 'material'], 'Materials retrieved successfully', $materials);
         } catch (\Exception $e) {
-            return $this->errorResponse(['model' => 'material'], $e->getMessage(), [], 500);
+            return $this->errorResponse(['model' => 'material'], $e->getMessage(), [], 422);
         }
     }
 
@@ -662,7 +662,7 @@ class ProductController extends Controller
         } catch (\Exception $e) {
             DB::rollBack();
 
-            return $this->errorResponse(['model' => 'material'], $e->getMessage(), [], 500);
+            return $this->errorResponse(['model' => 'material'], $e->getMessage(), [], 422);
         }
     }
 
@@ -680,7 +680,7 @@ class ProductController extends Controller
         } catch (\Exception $e) {
             DB::rollBack();
 
-            return $this->errorResponse(['model' => 'material'], $e->getMessage(), [], 500);
+            return $this->errorResponse(['model' => 'material'], $e->getMessage(), [], 422);
         }
     }
 
@@ -702,7 +702,7 @@ class ProductController extends Controller
         } catch (\Exception $e) {
             DB::rollBack();
 
-            return $this->errorResponse(['model' => 'shape'], $e->getMessage(), [], 500);
+            return $this->errorResponse(['model' => 'shape'], $e->getMessage(), [], 422);
         }
     }
 
@@ -712,7 +712,7 @@ class ProductController extends Controller
             $shapes = Shape::all();
             return $this->successResponse(['model' => 'shape'], 'Shapes retrieved successfully', $shapes);
         } catch (\Exception $e) {
-            return $this->errorResponse(['model' => 'shape'], $e->getMessage(), [], 500);
+            return $this->errorResponse(['model' => 'shape'], $e->getMessage(), [], 422);
         }
     }
 
@@ -737,7 +737,7 @@ class ProductController extends Controller
         } catch (\Exception $e) {
             DB::rollBack();
 
-            return $this->errorResponse(['model' => 'shape'], $e->getMessage(), [], 500);
+            return $this->errorResponse(['model' => 'shape'], $e->getMessage(), [], 422);
         }
     }
 
@@ -755,7 +755,7 @@ class ProductController extends Controller
         } catch (\Exception $e) {
             DB::rollBack();
 
-            return $this->errorResponse(['model' => 'shape'], $e->getMessage(), [], 500);
+            return $this->errorResponse(['model' => 'shape'], $e->getMessage(), [], 422);
         }
     }
 
@@ -777,7 +777,7 @@ class ProductController extends Controller
         } catch (\Exception $e) {
             DB::rollBack();
 
-            return $this->errorResponse(['model' => 'manufacturer'], $e->getMessage(), [], 500);
+            return $this->errorResponse(['model' => 'manufacturer'], $e->getMessage(), [], 422);
         }
     }
 
@@ -787,7 +787,7 @@ class ProductController extends Controller
             $manufacturers = Manufacturer::all();
             return $this->successResponse(['model' => 'manufacturer'], 'Manufacturers retrieved successfully', $manufacturers);
         } catch (\Exception $e) {
-            return $this->errorResponse(['model' => 'manufacturer'], $e->getMessage(), [], 500);
+            return $this->errorResponse(['model' => 'manufacturer'], $e->getMessage(), [], 422);
         }
     }
 
@@ -812,7 +812,7 @@ class ProductController extends Controller
         } catch (\Exception $e) {
             DB::rollBack();
 
-            return $this->errorResponse(['model' => 'manufacturer'], $e->getMessage(), [], 500);
+            return $this->errorResponse(['model' => 'manufacturer'], $e->getMessage(), [], 422);
         }
     }
 
@@ -830,7 +830,7 @@ class ProductController extends Controller
         } catch (\Exception $e) {
             DB::rollBack();
 
-            return $this->errorResponse(['model' => 'manufacturer'], $e->getMessage(), [], 500);
+            return $this->errorResponse(['model' => 'manufacturer'], $e->getMessage(), [], 422);
         }
     }
 
@@ -853,7 +853,7 @@ class ProductController extends Controller
             return [];
         }
         $imagePaths = explode(',', $images); 
-        return array_map(fn($image) => $baseUrl . $image, $imagePaths); 
+        return array_map(fn($image) => asset($image), $imagePaths); 
     }
 
 }

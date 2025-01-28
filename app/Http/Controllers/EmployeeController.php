@@ -194,7 +194,7 @@ class EmployeeController extends Controller
                 ['model' => 'employee_import'],
                 'Import failed due to an unexpected error.',
                 [$e->getMessage()],
-                500
+                422
             );
         }
     }

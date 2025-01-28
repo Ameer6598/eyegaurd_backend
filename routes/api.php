@@ -6,6 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\OrderController;
 use Illuminate\Support\Facades\Hash;
 
 
@@ -87,6 +88,10 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::delete('delete/{productId}', [ProductController::class, 'deleteProduct']);
         });
 
+        Route::get('get-all-orders', [OrderController::class, 'getAllOrders']);
+        Route::post('update-order-status', [OrderController::class, 'updateOrderStatus']);
+
+
     });
 
     Route::middleware('role:company')->group(function () {
@@ -103,11 +108,15 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::get('{employeeId}', [EmployeeController::class, 'getEmployee']);
         });
         Route::get('get-company-products', [ProductController::class, 'getCompanyProducts']);
+        Route::get('get-company-orders', [OrderController::class, 'getCompanyOrders']);
+
     });
 
     Route::middleware('role:employee')->group(function () {
 
         Route::get('get-employee-products', [ProductController::class, 'getemployeeProducts']);
+        Route::post('create-order', [OrderController::class, 'storeOrder']);
+        Route::get('get-employee-orders', [OrderController::class, 'getEmployeeOrders']);
 
 
     });
