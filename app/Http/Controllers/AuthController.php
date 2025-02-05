@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Employee;
 use App\Models\User;
+use App\Models\Order;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 use App\Traits\ApiResponse;
@@ -59,7 +60,8 @@ class AuthController extends Controller
                 'access_token' => $token,
                 'token_type' => 'Bearer',
                 'role' => $user->role, 
-                'benefit_amount' => Employee::where('id', $user->employee_id)->value('benefit_amount')
+                'benefit_amount' => Employee::where('id', $user->employee_id)->value('benefit_amount'),
+                'order_count' => Order::where('employee_id', $user->employee_id)->count()
             ]);
     }
 
