@@ -29,6 +29,7 @@ class EmployeeController extends Controller
                 'email' => 'required|email|unique:users,email',
                 'password' => 'required',
                 'designation' => 'required',
+                'benefit_amount' => ['nullable', 'numeric'],
             ]);
             DB::beginTransaction();
 
@@ -36,7 +37,7 @@ class EmployeeController extends Controller
                 'designation' => $request->designation	 ?? '',
                 'status' => $request->status 	 ?? '',
                 'phone' => $request->phone ?? '',
-                'benefit_amount' => $request->benefit_amount ?? '',
+                'benefit_amount' => $request->benefit_amount ?? 0,
                 'company_id' => auth('sanctum')->user()->company_id,
             ]);
             
@@ -48,14 +49,15 @@ class EmployeeController extends Controller
                 'employee_id' => $employee->id,
                 'password' => Hash::make($request->password),
             ]);
-
-            $transaction = Transaction::create([
-                'employee_id' => $employee->id,
-                'transaction_type' => 'credit',
-                'amount' => $request->benefit_amount ?? '',
-                'balance' => $request->benefit_amount ?? '',
-                'description' => $request->description ?? '',
-            ]);
+            if($request->benefit_amount){
+                Transaction::create([
+                    'employee_id' => $employee->id,
+                    'transaction_type' => 'credit',
+                    'amount' => $request->benefit_amount ?? '',
+                    'balance' => $request->benefit_amount ?? '',
+                    'description' => $request->description ?? '',
+                ]);
+            }
 
             DB::commit();
 
