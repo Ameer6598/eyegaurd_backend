@@ -87,9 +87,9 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::post('update', [ProductController::class, 'update']);
             Route::delete('delete/{productId}', [ProductController::class, 'deleteProduct']);
         });
-
         Route::get('get-all-orders', [OrderController::class, 'getAllOrders']);
         Route::post('update-order-status', [OrderController::class, 'updateOrderStatus']);
+        Route::get('employees', [EmployeeController::class, 'getAll']);
 
 
     });

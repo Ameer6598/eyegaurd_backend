@@ -29,6 +29,7 @@ class EmployeeController extends Controller
                 'email' => 'required|email|unique:users,email',
                 'password' => 'required',
                 'designation' => 'required',
+                'benefit_amount' => ['nullable', 'numeric'],
             ]);
             DB::beginTransaction();
 
@@ -36,7 +37,7 @@ class EmployeeController extends Controller
                 'designation' => $request->designation	 ?? '',
                 'status' => $request->status 	 ?? '',
                 'phone' => $request->phone ?? '',
-                'benefit_amount' => $request->benefit_amount ?? '',
+                'benefit_amount' => $request->benefit_amount ?? 0,
                 'company_id' => auth('sanctum')->user()->company_id,
             ]);
             
@@ -48,14 +49,15 @@ class EmployeeController extends Controller
                 'employee_id' => $employee->id,
                 'password' => Hash::make($request->password),
             ]);
-
-            $transaction = Transaction::create([
-                'employee_id' => $employee->id,
-                'transaction_type' => 'credit',
-                'amount' => $request->benefit_amount ?? '',
-                'balance' => $request->benefit_amount ?? '',
-                'description' => $request->description ?? '',
-            ]);
+            if($request->benefit_amount){
+                Transaction::create([
+                    'employee_id' => $employee->id,
+                    'transaction_type' => 'credit',
+                    'amount' => $request->benefit_amount ?? '',
+                    'balance' => $request->benefit_amount ?? '',
+                    'description' => $request->description ?? '',
+                ]);
+            }
 
             DB::commit();
 
@@ -154,11 +156,14 @@ class EmployeeController extends Controller
 
     public function getAll()
     {
-        try {
+        try {$companyId = auth('sanctum')->user()->company_id;
+
             $employees = DB::table('employees')
                 ->join('users', 'employees.id', '=', 'users.employee_id')
                 ->select('employees.*', 'users.name as username', 'users.email')
-                ->where('employees.company_id', auth('sanctum')->user()->company_id)
+                ->when($companyId, function ($query, $companyId) {
+                    return $query->where('employees.company_id', $companyId);
+                })
                 ->get();
             if ($employees->isEmpty()) {
                 return $this->errorResponse(['model' => 'employee'], 'No employees found', [], 404);
