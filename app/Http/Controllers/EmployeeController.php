@@ -24,7 +24,6 @@ class EmployeeController extends Controller
     {
         try {
             $request->validate([
-                'employe_name' => 'required|string|max:255',
                 'username' => 'required',
                 'email' => 'required|email|unique:users,email',
                 'password' => 'required',
@@ -42,7 +41,7 @@ class EmployeeController extends Controller
             ]);
             
             User::create([
-                'name' => $request->employe_name,
+                'name' => $request->username,
                 'email' => $request->email,
                 'role' => 'employee',
                 'company_id' => auth('sanctum')->user()->company_id,
@@ -75,7 +74,6 @@ class EmployeeController extends Controller
     {
         try {
             $request->validate([
-                'employe_name' => 'required|string|max:255',
                 'username' => 'required',
                 'email' => 'required',
                 'designation' => 'required',
@@ -159,11 +157,12 @@ class EmployeeController extends Controller
         try {$companyId = auth('sanctum')->user()->company_id;
 
             $employees = DB::table('employees')
-                ->join('users', 'employees.id', '=', 'users.employee_id')
-                ->select('employees.*', 'users.name as username', 'users.email')
-                ->when($companyId, function ($query, $companyId) {
-                    return $query->where('employees.company_id', $companyId);
-                })
+                    ->join('users as u1', 'employees.id', '=', 'u1.employee_id') 
+                    ->join('companies as u2', 'employees.company_id', '=', 'u2.id')
+                    ->select('employees.*', 'u1.name as employeename', 'u1.email','u2.company_name as companyname')
+                    ->when($companyId, function ($query, $companyId) {
+                        return $query->where('employees.company_id', $companyId);
+                    })
                 ->get();
             if ($employees->isEmpty()) {
                 return $this->errorResponse(['model' => 'employee'], 'No employees found', [], 404);
