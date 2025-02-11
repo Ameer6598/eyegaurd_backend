@@ -159,11 +159,13 @@ class EmployeeController extends Controller
         try {$companyId = auth('sanctum')->user()->company_id;
 
             $employees = DB::table('employees')
-                ->join('users', 'employees.id', '=', 'users.employee_id')
-                ->select('employees.*', 'users.name as username', 'users.email')
-                ->when($companyId, function ($query, $companyId) {
-                    return $query->where('employees.company_id', $companyId);
-                })
+                    ->join('users as u1', 'employees.id', '=', 'u1.employee_id') 
+                    ->join('users as u2', 'employees.company_id', '=', 'u2.company_id')
+                    ->where('u2.role', 'company') // Filter for company role
+                    ->select('employees.*', 'u1.name as employeename', 'u1.email','u2.name as companyname')
+                    ->when($companyId, function ($query, $companyId) {
+                        return $query->where('employees.company_id', $companyId);
+                    })
                 ->get();
             if ($employees->isEmpty()) {
                 return $this->errorResponse(['model' => 'employee'], 'No employees found', [], 404);
