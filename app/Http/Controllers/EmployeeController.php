@@ -24,7 +24,6 @@ class EmployeeController extends Controller
     {
         try {
             $request->validate([
-                'employe_name' => 'required|string|max:255',
                 'username' => 'required',
                 'email' => 'required|email|unique:users,email',
                 'password' => 'required',
@@ -42,7 +41,7 @@ class EmployeeController extends Controller
             ]);
             
             User::create([
-                'name' => $request->employe_name,
+                'name' => $request->username,
                 'email' => $request->email,
                 'role' => 'employee',
                 'company_id' => auth('sanctum')->user()->company_id,
@@ -75,7 +74,6 @@ class EmployeeController extends Controller
     {
         try {
             $request->validate([
-                'employe_name' => 'required|string|max:255',
                 'username' => 'required',
                 'email' => 'required',
                 'designation' => 'required',
@@ -160,9 +158,8 @@ class EmployeeController extends Controller
 
             $employees = DB::table('employees')
                     ->join('users as u1', 'employees.id', '=', 'u1.employee_id') 
-                    ->join('users as u2', 'employees.company_id', '=', 'u2.company_id')
-                    ->where('u2.role', 'company') // Filter for company role
-                    ->select('employees.*', 'u1.name as employeename', 'u1.email','u2.name as companyname')
+                    ->join('companies as u2', 'employees.company_id', '=', 'u2.id')
+                    ->select('employees.*', 'u1.name as employeename', 'u1.email','u2.company_name as companyname')
                     ->when($companyId, function ($query, $companyId) {
                         return $query->where('employees.company_id', $companyId);
                     })

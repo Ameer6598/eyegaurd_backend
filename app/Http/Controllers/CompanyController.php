@@ -137,7 +137,7 @@ class CompanyController extends Controller
     {
         try {
             $companies = DB::table('companies')
-                ->join('users', 'companies.id', '=', 'users.company_id')
+                ->join('users', 'companies.id', '=', 'users.company_id')->where('role','company')
                 ->select('companies.*', 'users.name as username', 'users.email')
                 ->get();
             if ($companies->isEmpty()) {
