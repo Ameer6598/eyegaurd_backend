@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Traits\ApiResponse;
-use App\Traits\common;
+use App\Traits\Common;
 use DB;
 use App\Models\Employee;
 use App\Models\Order;
@@ -14,7 +14,7 @@ class OrderController extends Controller
 {
     //
     use ApiResponse;
-    use common;
+    use Common;
 
 
     public function storeOrder(Request $request)

@@ -4,7 +4,7 @@ namespace App\Traits;
 use DB;
 use Illuminate\Http\Request;
 
-trait Common
+trait common
 {
 
     public function getProductDetails($productId)
@@ -172,14 +172,26 @@ trait Common
     $query = $query . ' ORDER BY o.id';
     $orders = DB::select($query, $parameters);
     
-    foreach($orders as $order)
-    {
-        $order->data =json_decode($order->data);
-        $order->employee_data =json_decode($order->data->employee);
-        $order->company_data =json_decode($order->data->company);
-        unset($order->data);
+    foreach ($orders as $order) {
+    // Ensure $order->data is a decoded object or array
+    if (is_string($order->data)) {
+        $order->data = json_decode($order->data);
     }
-    return $orders;
+
+    // Check if $order->data is now an object before accessing properties
+    if (is_object($order->data) && isset($order->data->employee)) {
+        $order->employee_data = is_string($order->data->employee) ? json_decode($order->data->employee) : $order->data->employee;
+    }
+
+    if (is_object($order->data) && isset($order->data->company)) {
+        $order->company_data = is_string($order->data->company) ? json_decode($order->data->company) : $order->data->company;
+    }
+
+    unset($order->data);
+}
+
+return $orders;
+
 }
 
     

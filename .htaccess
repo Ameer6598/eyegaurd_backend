@@ -1,0 +1,27 @@
+# Ensure mod_rewrite is enabled
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Redirect to public folder
+    RewriteRule ^$ public/ [L]
+    RewriteCond %{REQUEST_URI} !^public/
+    RewriteRule ^(.*)$ public/$1 [L]
+
+    # Handle API requests
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^(.*)$ public/index.php/$1 [L]
+
+    # Allow CORS for API access
+    <IfModule mod_headers.c>
+        Header set Access-Control-Allow-Origin "*"
+        Header set Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS"
+        Header set Access-Control-Allow-Headers "Content-Type, Authorization"
+    </IfModule>
+</IfModule>
+
+# Prevent access to sensitive files
+<FilesMatch ".(env|json|log|md|lock)">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
