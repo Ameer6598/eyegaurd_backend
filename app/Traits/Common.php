@@ -124,12 +124,14 @@ trait Common
                             SELECT name
                             FROM users
                             WHERE users.company_id = c.id
+                            AND users.role = 'company'
                             LIMIT 1
                         ),
                         'email', (
                             SELECT email
                             FROM users
                             WHERE users.company_id = c.id
+                            AND users.role = 'company'
                             LIMIT 1
                         )
                     ) AS `company_data`
