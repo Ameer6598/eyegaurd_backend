@@ -94,12 +94,13 @@ class CompanyController extends Controller
     {
         try {
             DB::beginTransaction();
-            $company = Company::findOrFail($companyId);
-            $user = User::where('company_id', $companyId)->firstOrFail();
+            // $company = Company::findOrFail($companyId);
+            $users = User::where('company_id', $companyId)->get(); 
 
-            $user->delete();
-            $company->delete();
-
+            foreach ($users as $user) {
+                $user->status = $user->status == 0 ? 1 : 0;
+                $user->save();
+            }
             DB::commit();
 
             return $this->successResponse(['model' => 'company'], 'Company and User deleted successfully', []);
@@ -138,7 +139,7 @@ class CompanyController extends Controller
         try {
             $companies = DB::table('companies')
                 ->join('users', 'companies.id', '=', 'users.company_id')->where('role','company')
-                ->select('companies.*', 'users.name as username', 'users.email')
+                ->select('companies.*', 'users.name as username', 'users.email','users.status')
                 ->get();
             if ($companies->isEmpty()) {
                 return $this->errorResponse(['model' => 'company'], 'No companies found', [], 404);

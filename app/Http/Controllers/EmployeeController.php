@@ -112,11 +112,12 @@ class EmployeeController extends Controller
     {
         try {
             DB::beginTransaction();
-            $employee = Employee::findOrFail($employeeId);
+            // $employee = Employee::findOrFail($employeeId);
             $user = User::where('employee_id', $employeeId)->firstOrFail();
-
-            $user->delete();
-            $employee->delete();
+            
+            $user->status = $user->status == 0 ? 1 : 0;
+            $user->save();
+            // $employee->delete();
 
             DB::commit();
 
@@ -159,7 +160,7 @@ class EmployeeController extends Controller
             $employees = DB::table('employees')
                     ->join('users as u1', 'employees.id', '=', 'u1.employee_id') 
                     ->join('companies as u2', 'employees.company_id', '=', 'u2.id')
-                    ->select('employees.*', 'u1.name as employeename', 'u1.email','u2.company_name as companyname')
+                    ->select('employees.*', 'u1.name as employeename','u1.status' ,'u1.email','u2.company_name as companyname')
                     ->when($companyId, function ($query, $companyId) {
                         return $query->where('employees.company_id', $companyId);
                     })
