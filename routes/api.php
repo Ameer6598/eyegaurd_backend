@@ -102,6 +102,7 @@ Route::middleware('auth:sanctum')->group(function () {
             
             Route::get('employees', [EmployeeController::class, 'getAll']);
             Route::post('create',[EmployeeController::class,'create']);
+            Route::post('assign-product',[EmployeeController::class,'assignProduct']);
             Route::post('update',[EmployeeController::class,'update']);
             Route::post('update-benefit-amount',[EmployeeController::class,'bulkUpdate']);
             Route::delete('{employeeId}', [EmployeeController::class, 'delete']);
