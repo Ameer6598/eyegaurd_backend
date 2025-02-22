@@ -7,6 +7,7 @@ use App\Imports\ImportEmployees;
 use App\Traits\ApiResponse;
 
 use App\Models\Company;
+use App\Models\EmployeeProduct;
 use App\Models\Transaction;
 use App\Models\Employee;
 use App\Models\User;
@@ -28,7 +29,7 @@ class EmployeeController extends Controller
                 'email' => 'required|email|unique:users,email',
                 'password' => 'required',
                 'designation' => 'required',
-                'benefit_amount' => ['nullable', 'numeric'],
+                'benefit_amount' => ['nullable', 'numeric'], 
             ]);
             DB::beginTransaction();
 
@@ -253,5 +254,59 @@ class EmployeeController extends Controller
         }
     }
 
+    public function assignProduct(Request $request)
+    {
+        try {
+            $request->validate([
+                'employeeids' => 'required|array', 
+                'employeeids.*' => 'required|integer', 
+            
+                'productid' => 'required|array', 
+                'productid.*' => 'required|integer', 
+            
+            ]);
+           
+            DB::beginTransaction();
+              
+            
+            $companyId = auth('sanctum')->user()->company_id;
+             $employeeIds = $request->employeeids;
+            $productIds = $request->productid;
+            $newRecords = [];
+
+            foreach ($employeeIds as $employeeId) {
+                foreach ($productIds as $productId) {
+                    $exists = EmployeeProduct::where([
+                        'company_id' => $companyId,
+                        'employee_id' => $employeeId,
+                        'product_id' => $productId,
+                    ])->exists();
+    
+                    if (!$exists) {
+                        $newRecords[] = [
+                            'company_id' => $companyId,
+                            'employee_id' => $employeeId,
+                            'product_id' => $productId,
+                        ];
+                    }
+                }
+            }
+            if (!empty($newRecords)) {
+                EmployeeProduct::insert($newRecords);
+            }
+               
+            DB::commit();
+
+            return $this->successResponse(array('model' => 'employee'), 'Product Assigned Successfully', []);
+
+        } 
+        catch (\Exception $e) {
+           
+           DB::rollBack();
+           return $this->errorResponse(['model' => 'employee'], $e->getMessage(), [], 422);
+        }
+    }
+
 
 }
+
